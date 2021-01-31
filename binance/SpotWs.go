@@ -182,6 +182,7 @@ func (s *SpotWs) tickerHandle(data json2.RawMessage, pair goex.CurrencyPair) err
 
 	ticker.Pair = pair
 	ticker.Vol = goex.ToFloat64(tickerData["v"])
+	ticker.Open = goex.ToFloat64(tickerData["o"])
 	ticker.Last = goex.ToFloat64(tickerData["c"])
 	ticker.Sell = goex.ToFloat64(tickerData["a"])
 	ticker.Buy = goex.ToFloat64(tickerData["b"])
