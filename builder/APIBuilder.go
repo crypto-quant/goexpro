@@ -4,32 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	. "github.com/nntaoli-project/goex"
-	"github.com/nntaoli-project/goex/bigone"
-	"github.com/nntaoli-project/goex/binance"
-	"github.com/nntaoli-project/goex/bitfinex"
-	"github.com/nntaoli-project/goex/bithumb"
-	"github.com/nntaoli-project/goex/bitmex"
-	"github.com/nntaoli-project/goex/bitstamp"
-	"github.com/nntaoli-project/goex/bittrex"
-	"github.com/nntaoli-project/goex/coinbene"
-	"github.com/nntaoli-project/goex/kucoin"
-
-	"github.com/nntaoli-project/goex/atop"
-	//"github.com/nntaoli-project/goex/coin58"
+	. "github.com/crypto-quant/goexpro"
+	"github.com/crypto-quant/goexpro/binance"
 	"net"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/nntaoli-project/goex/coinex"
-	"github.com/nntaoli-project/goex/gdax"
-	"github.com/nntaoli-project/goex/hitbtc"
-	"github.com/nntaoli-project/goex/huobi"
-	"github.com/nntaoli-project/goex/kraken"
-	"github.com/nntaoli-project/goex/okex"
-	"github.com/nntaoli-project/goex/poloniex"
-	"github.com/nntaoli-project/goex/zb"
+	"github.com/crypto-quant/goexpro/okex"
 )
 
 type APIBuilder struct {
@@ -189,23 +171,6 @@ func (builder *APIBuilder) Endpoint(endpoint string) (_builer *APIBuilder) {
 func (builder *APIBuilder) Build(exName string) (api API) {
 	var _api API
 	switch exName {
-	case KUCOIN:
-		_api = kucoin.New(builder.apiKey, builder.secretkey, builder.apiPassphrase)
-	//case OKCOIN_CN:
-	//	_api = okcoin.New(builder.client, builder.apiKey, builder.secretkey)
-	case POLONIEX:
-		_api = poloniex.New(builder.client, builder.apiKey, builder.secretkey)
-	//case OKCOIN_COM:
-	//	_api = okcoin.NewCOM(builder.client, builder.apiKey, builder.secretkey)
-	case BITSTAMP:
-		_api = bitstamp.NewBitstamp(builder.client, builder.apiKey, builder.secretkey, builder.clientId)
-	case HUOBI_PRO:
-		//_api = huobi.NewHuoBiProSpot(builder.client, builder.apiKey, builder.secretkey)
-		_api = huobi.NewHuobiWithConfig(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.endPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey})
 	case OKEX_V3, OKEX:
 		_api = okex.NewOKEx(&APIConfig{
 			HttpClient:    builder.client,
@@ -214,10 +179,6 @@ func (builder *APIBuilder) Build(exName string) (api API) {
 			ApiPassphrase: builder.apiPassphrase,
 			Endpoint:      builder.endPoint,
 		})
-	case BITFINEX:
-		_api = bitfinex.New(builder.client, builder.apiKey, builder.secretkey)
-	case KRAKEN:
-		_api = kraken.New(builder.client, builder.apiKey, builder.secretkey)
 	case BINANCE:
 		//_api = binance.New(builder.client, builder.apiKey, builder.secretkey)
 		_api = binance.NewWithConfig(&APIConfig{
@@ -225,22 +186,6 @@ func (builder *APIBuilder) Build(exName string) (api API) {
 			Endpoint:     builder.endPoint,
 			ApiKey:       builder.apiKey,
 			ApiSecretKey: builder.secretkey})
-	case BITTREX:
-		_api = bittrex.New(builder.client, builder.apiKey, builder.secretkey)
-	case BITHUMB:
-		_api = bithumb.New(builder.client, builder.apiKey, builder.secretkey)
-	case GDAX:
-		_api = gdax.New(builder.client, builder.apiKey, builder.secretkey)
-	case ZB:
-		_api = zb.New(builder.client, builder.apiKey, builder.secretkey)
-	case COINEX:
-		_api = coinex.New(builder.client, builder.apiKey, builder.secretkey)
-	case BIGONE:
-		_api = bigone.New(builder.client, builder.apiKey, builder.secretkey)
-	case HITBTC:
-		_api = hitbtc.New(builder.client, builder.apiKey, builder.secretkey)
-	case ATOP:
-		_api = atop.New(builder.client, builder.apiKey, builder.secretkey)
 	default:
 		println("exchange name error [" + exName + "].")
 
@@ -250,20 +195,6 @@ func (builder *APIBuilder) Build(exName string) (api API) {
 
 func (builder *APIBuilder) BuildFuture(exName string) (api FutureRestAPI) {
 	switch exName {
-	case BITMEX:
-		return bitmex.New(&APIConfig{
-			//Endpoint:     "https://www.bitmex.com/",
-			Endpoint:     builder.futuresEndPoint,
-			HttpClient:   builder.client,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey})
-	case BITMEX_TEST:
-		return bitmex.New(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     "https://testnet.bitmex.com",
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey,
-		})
 	case OKEX_FUTURE, OKEX_V3:
 		//return okcoin.NewOKEx(builder.client, builder.apiKey, builder.secretkey)
 		return okex.NewOKEx(&APIConfig{
@@ -273,19 +204,6 @@ func (builder *APIBuilder) BuildFuture(exName string) (api FutureRestAPI) {
 			ApiKey:        builder.apiKey,
 			ApiSecretKey:  builder.secretkey,
 			ApiPassphrase: builder.apiPassphrase}).OKExFuture
-	case HBDM:
-		return huobi.NewHbdm(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.futuresEndPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey})
-	case HBDM_SWAP:
-		return huobi.NewHbdmSwap(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.endPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey,
-		})
 	case OKEX_SWAP:
 		return okex.NewOKEx(&APIConfig{
 			HttpClient:    builder.client,
@@ -293,15 +211,6 @@ func (builder *APIBuilder) BuildFuture(exName string) (api FutureRestAPI) {
 			ApiKey:        builder.apiKey,
 			ApiSecretKey:  builder.secretkey,
 			ApiPassphrase: builder.apiPassphrase}).OKExSwap
-	case COINBENE:
-		return coinbene.NewCoinbeneSwap(APIConfig{
-			HttpClient: builder.client,
-			//	Endpoint:     "http://openapi-contract.coinbene.com",
-			Endpoint:     builder.futuresEndPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey,
-		})
-
 	case BINANCE_SWAP:
 		return binance.NewBinanceSwap(&APIConfig{
 			HttpClient:   builder.client,
@@ -329,14 +238,8 @@ func (builder *APIBuilder) BuildFuturesWs(exName string) (FuturesWsApi, error) {
 			HttpClient: builder.client,
 			Endpoint:   builder.futuresEndPoint,
 		})), nil
-	case HBDM:
-		return huobi.NewHbdmWs(), nil
-	case HBDM_SWAP:
-		return huobi.NewHbdmSwapWs(), nil
 	case BINANCE, BINANCE_FUTURES, BINANCE_SWAP:
 		return binance.NewFuturesWs(), nil
-	case BITMEX:
-		return bitmex.NewSwapWs(), nil
 	}
 	return nil, errors.New("not support the exchange " + exName)
 }
@@ -345,8 +248,6 @@ func (builder *APIBuilder) BuildSpotWs(exName string) (SpotWsApi, error) {
 	switch exName {
 	case OKEX_V3, OKEX:
 		return okex.NewOKExSpotV3Ws(nil), nil
-	case HUOBI_PRO, HUOBI:
-		return huobi.NewSpotWs(), nil
 	case BINANCE:
 		return binance.NewSpotWs(), nil
 	}
@@ -362,13 +263,6 @@ func (builder *APIBuilder) BuildWallet(exName string) (WalletApi, error) {
 			ApiSecretKey:  builder.secretkey,
 			ApiPassphrase: builder.apiPassphrase,
 		}).OKExWallet, nil
-	case HUOBI_PRO:
-		return huobi.NewWallet(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.endPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey,
-		}), nil
 	case BINANCE:
 		return binance.NewWallet(&APIConfig{
 			HttpClient:   builder.client,

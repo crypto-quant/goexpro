@@ -1,8 +1,8 @@
 package okex
 
 import (
-	"github.com/nntaoli-project/goex"
-	"github.com/nntaoli-project/goex/internal/logger"
+	"github.com/crypto-quant/goexpro"
+	"github.com/crypto-quant/goexpro/internal/logger"
 	"os"
 	"testing"
 	"time"

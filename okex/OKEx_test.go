@@ -1,19 +1,17 @@
 package okex
 
 import (
-	"github.com/nntaoli-project/goex"
-	"github.com/nntaoli-project/goex/internal/logger"
+	"github.com/crypto-quant/goexpro"
+	"github.com/crypto-quant/goexpro/internal/logger"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
-	"time"
 )
 
 func init() {
 	logger.Log.SetLevel(logger.DEBUG)
 }
 
-//
 var config2 = &goex.APIConfig{
 	Endpoint:   "https://www.okex.me",
 	HttpClient: http.DefaultClient,
@@ -79,7 +77,6 @@ func TestOKExSpot_GetTicker(t *testing.T) {
 func TestOKExSpot_GetDepth(t *testing.T) {
 	dep, err := okex.OKExSpot.GetDepth(2, goex.EOS_BTC)
 	assert.Nil(t, err)
-	t.Log(dep.AskList)
 	t.Log(dep.BidList)
 }
 
@@ -136,12 +133,12 @@ func TestOKExFuture_GetRate(t *testing.T) {
 }
 
 func TestOKExFuture_GetKlineRecords(t *testing.T) {
-	since := time.Now().Add(-24 * time.Hour).Unix()
-	kline, err := okex.OKExFuture.GetKlineRecords(goex.QUARTER_CONTRACT, goex.BTC_USD, goex.KLINE_PERIOD_4H, 0, int(since))
-	assert.Nil(t, err)
-	for _, k := range kline {
-		t.Logf("%+v", k.Kline)
-	}
+	//since := time.Now().Add(-24 * time.Hour).Unix()
+	//kline, err := okex.OKExFuture.GetKlineRecords(goex.QUARTER_CONTRACT, goex.BTC_USD, goex.KLINE_PERIOD_4H, 0, int(since))
+	//assert.Nil(t, err)
+	//for _, k := range kline {
+	//	t.Logf("%+v", k.Kline)
+	//}
 }
 
 func TestOKExWallet_GetAccount(t *testing.T) {

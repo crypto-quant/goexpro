@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	. "github.com/crypto-quant/goexpro"
+	"github.com/crypto-quant/goexpro/internal/logger"
 	"github.com/google/uuid"
-	. "github.com/nntaoli-project/goex"
-	"github.com/nntaoli-project/goex/internal/logger"
 	"strings"
 	"sync"
 	"time"
 )
 
-const baseUrl = "https://www.okex.com"
+const baseUrl = "https://www.okx.com"
 
 type OKEx struct {
 	config          *APIConfig
@@ -93,7 +93,7 @@ func (ok *OKEx) adaptOrderState(state int) TradeStatus {
 }
 
 /*
- Get a http request body is a json string and a byte array.
+Get a http request body is a json string and a byte array.
 */
 func (ok *OKEx) BuildRequestBody(params interface{}) (string, *bytes.Reader, error) {
 	if params == nil {
@@ -120,8 +120,9 @@ func (ok *OKEx) doParamSign(httpMethod, uri, requestBody string) (string, string
 }
 
 /*
- Get a iso time
-  eg: 2018-03-16T18:02:48.284Z
+Get a iso time
+
+	eg: 2018-03-16T18:02:48.284Z
 */
 func (ok *OKEx) IsoTime() string {
 	utcTime := time.Now().UTC()

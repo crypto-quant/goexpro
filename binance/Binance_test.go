@@ -2,7 +2,7 @@ package binance
 
 import (
 	"fmt"
-	"github.com/nntaoli-project/goex"
+	goex "github.com/crypto-quant/goexpro"
 	"net/http"
 	"testing"
 	"time"
